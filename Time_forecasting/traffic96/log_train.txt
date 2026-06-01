@@ -1,0 +1,203 @@
+Namespace(batch_size=16, cols=None, data_path='traffic.csv', dataset='traffic', embed='timeF', features='S', freq='h', gpu='0', inverse=False, label_len=0, log_dir='traffic96', lr=0.001, optimizer='momentum', output_size=720, pred_len=720, resume=False, root_path='./Datasets_autoformer/traffic/', seq_len=96, target='OT', timeenc=0)
+train2.py
+
+Epoch: 0
+MSELoss: 1.004 |Total:11456
+TEST MSELoss: 1.992 | (Total:2784)
+
+Epoch: 1
+MSELoss: 0.979 |Total:11456
+TEST MSELoss: 1.955 | (Total:2784)
+
+Epoch: 2
+MSELoss: 0.956 |Total:11456
+TEST MSELoss: 1.915 | (Total:2784)
+
+Epoch: 3
+MSELoss: 0.929 |Total:11456
+TEST MSELoss: 1.869 | (Total:2784)
+
+Epoch: 4
+MSELoss: 0.897 |Total:11456
+TEST MSELoss: 1.819 | (Total:2784)
+
+Epoch: 5
+MSELoss: 0.863 |Total:11456
+TEST MSELoss: 1.763 | (Total:2784)
+
+Epoch: 6
+MSELoss: 0.824 |Total:11456
+TEST MSELoss: 1.702 | (Total:2784)
+
+Epoch: 7
+MSELoss: 0.781 |Total:11456
+TEST MSELoss: 1.637 | (Total:2784)
+
+Epoch: 8
+MSELoss: 0.737 |Total:11456
+TEST MSELoss: 1.568 | (Total:2784)
+
+Epoch: 9
+MSELoss: 0.692 |Total:11456
+TEST MSELoss: 1.501 | (Total:2784)
+
+Epoch: 10
+MSELoss: 0.649 |Total:11456
+TEST MSELoss: 1.436 | (Total:2784)
+
+Epoch: 11
+MSELoss: 0.608 |Total:11456
+TEST MSELoss: 1.374 | (Total:2784)
+
+Epoch: 12
+MSELoss: 0.569 |Total:11456
+TEST MSELoss: 1.316 | (Total:2784)
+
+Epoch: 13
+MSELoss: 0.533 |Total:11456
+TEST MSELoss: 1.262 | (Total:2784)
+
+Epoch: 14
+MSELoss: 0.499 |Total:11456
+TEST MSELoss: 1.212 | (Total:2784)
+
+Epoch: 15
+MSELoss: 0.468 |Total:11456
+TEST MSELoss: 1.165 | (Total:2784)
+
+Epoch: 16
+MSELoss: 0.439 |Total:11456
+TEST MSELoss: 1.119 | (Total:2784)
+
+Epoch: 17
+MSELoss: 0.414 |Total:11456
+TEST MSELoss: 1.079 | (Total:2784)
+
+Epoch: 18
+MSELoss: 0.390 |Total:11456
+TEST MSELoss: 1.042 | (Total:2784)
+
+Epoch: 19
+MSELoss: 0.369 |Total:11456
+TEST MSELoss: 1.007 | (Total:2784)
+
+Epoch: 20
+MSELoss: 0.349 |Total:11456
+TEST MSELoss: 0.975 | (Total:2784)
+
+Epoch: 21
+MSELoss: 0.332 |Total:11456
+TEST MSELoss: 0.945 | (Total:2784)
+
+Epoch: 22
+MSELoss: 0.316 |Total:11456
+TEST MSELoss: 0.918 | (Total:2784)
+
+Epoch: 23
+MSELoss: 0.302 |Total:11456
+TEST MSELoss: 0.894 | (Total:2784)
+
+Epoch: 24
+MSELoss: 0.289 |Total:11456
+TEST MSELoss: 0.870 | (Total:2784)
+
+Epoch: 25
+MSELoss: 0.277 |Total:11456
+TEST MSELoss: 0.847 | (Total:2784)
+
+Epoch: 26
+MSELoss: 0.267 |Total:11456
+TEST MSELoss: 0.827 | (Total:2784)
+
+Epoch: 27
+MSELoss: 0.257 |Total:11456
+TEST MSELoss: 0.810 | (Total:2784)
+
+Epoch: 28
+MSELoss: 0.248 |Total:11456
+TEST MSELoss: 0.793 | (Total:2784)
+
+Epoch: 29
+MSELoss: 0.240 |Total:11456
+TEST MSELoss: 0.778 | (Total:2784)
+In epoch 30 the LR is decay to 0.000100
+
+Epoch: 30
+MSELoss: 0.236 |Total:11456
+TEST MSELoss: 0.777 | (Total:2784)
+
+Epoch: 31
+MSELoss: 0.236 |Total:11456
+TEST MSELoss: 0.775 | (Total:2784)
+
+Epoch: 32
+MSELoss: 0.235 |Total:11456
+TEST MSELoss: 0.774 | (Total:2784)
+
+Epoch: 33
+MSELoss: 0.234 |Total:11456
+TEST MSELoss: 0.772 | (Total:2784)
+
+Epoch: 34
+MSELoss: 0.234 |Total:11456
+TEST MSELoss: 0.771 | (Total:2784)
+
+Epoch: 35
+MSELoss: 0.233 |Total:11456
+TEST MSELoss: 0.770 | (Total:2784)
+
+Epoch: 36
+MSELoss: 0.232 |Total:11456
+TEST MSELoss: 0.768 | (Total:2784)
+
+Epoch: 37
+MSELoss: 0.232 |Total:11456
+TEST MSELoss: 0.767 | (Total:2784)
+
+Epoch: 38
+MSELoss: 0.231 |Total:11456
+TEST MSELoss: 0.766 | (Total:2784)
+
+Epoch: 39
+MSELoss: 0.231 |Total:11456
+TEST MSELoss: 0.764 | (Total:2784)
+
+Epoch: 40
+MSELoss: 0.229 |Total:11456
+TEST MSELoss: 0.763 | (Total:2784)
+
+Epoch: 41
+MSELoss: 0.229 |Total:11456
+TEST MSELoss: 0.762 | (Total:2784)
+
+Epoch: 42
+MSELoss: 0.228 |Total:11456
+TEST MSELoss: 0.761 | (Total:2784)
+
+Epoch: 43
+MSELoss: 0.228 |Total:11456
+TEST MSELoss: 0.759 | (Total:2784)
+
+Epoch: 44
+MSELoss: 0.227 |Total:11456
+TEST MSELoss: 0.758 | (Total:2784)
+
+Epoch: 45
+MSELoss: 0.226 |Total:11456
+TEST MSELoss: 0.757 | (Total:2784)
+
+Epoch: 46
+MSELoss: 0.226 |Total:11456
+TEST MSELoss: 0.756 | (Total:2784)
+
+Epoch: 47
+MSELoss: 0.226 |Total:11456
+TEST MSELoss: 0.754 | (Total:2784)
+
+Epoch: 48
+MSELoss: 0.225 |Total:11456
+TEST MSELoss: 0.753 | (Total:2784)
+
+Epoch: 49
+MSELoss: 0.224 |Total:11456
+TEST MSELoss: 0.752 | (Total:2784)

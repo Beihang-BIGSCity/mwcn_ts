@@ -1,0 +1,14 @@
+Namespace()
+Dataset: Adiac/ | BestAcc: 84.399 /net=waveCNNatt1
+Dataset: Adiac1/ | BestAcc: 78.005
+Dataset: Adiac2/ | BestAcc: 83.887 /net=multiCNNatt1
+Dataset: Adiacwave/ | BestAcc: 81.841 
+Dataset: Adiacwave1/ | BestAcc: 83.376 /net=waveCNNatt1
+Dataset: CricketX/ | BestAcc: 71.538   /net=multiCNNatt1
+Dataset: CricketX1/ | BestAcc: 74.359  /net=waveCNNatt1  
+Dataset: CricketX1multi/ | BestAcc: 74.615  /net=multiCNNatt1
+Dataset: CricketX1wave/ | BestAcc: 72.564
+Dataset: ECG200/ | BestAcc: 95.000
+Dataset: ECG2001/ | BestAcc: 94.000
+Dataset: ECGFiveDaysmulti/ | BestAcc: 97.793 /multiCNNatt1
+Dataset: ECGFiveDayswave/ | BestAcc: 92.799  /waveCNNatt1
