@@ -1,4 +1,5 @@
 README in Time_forecasting:<br>
+use bash run_tsm.sh 0 expname to run<br>
 parameter adjust<br>
 lr:learning rate,default:0.001<br>
 log_dir: the folder save the results<br>
