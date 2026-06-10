@@ -215,10 +215,10 @@ def train(epoch):
         #if orthorgonal regularization
         """
         lamda = 0.0001
-        Ld1 = net.features2.convdecl1.weight
-        Ld2 = net.features2.convdecl2.weight
-        Hd1 = net.features2.convdech1.weight
-        Hd2 = net.features2.convdech2.weight
+        Ld1 = net.features[1].convdecl1.weight
+        Ld2 = net.features[1].convdecl2.weight
+        Hd1 = net.features[1].convdech1.weight
+        Hd2 = net.features[1].convdech2.weight
 
         orthogonal_regularization = orthogonal_reg(lamda,Ld1,Ld2,Hd1,Hd2)
         """

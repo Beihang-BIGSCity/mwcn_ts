@@ -210,7 +210,6 @@ def train(epoch):
         optimizer.zero_grad()
         #print("inputs shape",inputs.shape)
         outputs = net(inputs)
-        
         #if orthorgonal regularization
         """
         lamda = 0.0001
