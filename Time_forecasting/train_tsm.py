@@ -212,8 +212,8 @@ def train(epoch):
         #print("inputs shape",inputs.shape)
         # outputs, all_out1_pre, all_out2_pre, all_out3_pre, all_out1, all_out2, all_out3 = net(inputs)
         outputs = net(inputs)
-        #if orthorgonal regularization
-        """
+        
+        
         lamda = 0.0001
         Ld1 = net.features[1].convdecl1.weight
         Ld2 = net.features[1].convdecl2.weight
@@ -221,11 +221,11 @@ def train(epoch):
         Hd2 = net.features[1].convdech2.weight
 
         orthogonal_regularization = orthogonal_reg(lamda,Ld1,Ld2,Hd1,Hd2)
-        """
+        
         targets = targets.squeeze()
         targets = targets.float()
         #print("targets shape:",targets.shape)
-        loss = criterion(outputs, targets)
+        loss = criterion(outputs, targets) + orthogonal_regularization
         loss.backward()
         optimizer.step()
         train_loss += loss.item()
