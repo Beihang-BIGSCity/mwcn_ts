@@ -211,6 +211,7 @@ def train(epoch):
         #print("inputs shape",inputs.shape)
         outputs = net(inputs)
         
+        # orthorgonal regularization
         
         lamda = 0.0001
         Ld1 = net.features2.convdecl1.weight
@@ -224,7 +225,7 @@ def train(epoch):
         targets = targets.float()
         #print("targets shape:",targets.shape)
         loss = criterion(outputs, targets)
-        loss = loss+ orthogonal_regularization
+        loss = loss+ orthogonal_regularization #if orthorgonal regularization
         loss.backward()
         optimizer.step()
         train_loss += loss.item()
@@ -236,6 +237,74 @@ def train(epoch):
             % (train_loss/(batch_idx+1), total))
     log_string('MSELoss: %.3f |Total:%d'
         % (train_loss/(batch_idx+1), total), False)
+    
+def validate(epoch):
+
+    net.eval()
+
+    #vali_loss = []
+    vali_loss = 0.0
+    preds = []
+    targets_total = []
+    trues = []
+    total = 0
+    with torch.no_grad():
+
+        for batch_idx, batch in enumerate(vali_loader):
+
+            inputs, _, _, _ = batch
+            _, targets, _, _ = batch
+
+            inputs = inputs.squeeze(2)
+            targets = targets.squeeze(2)
+
+            inputs = inputs.to(device)
+            targets = targets.to(device)
+
+            targets = targets.squeeze().float()
+
+            outputs = net(inputs)
+
+            loss = criterion(outputs, targets)
+            vali_loss += loss.item()
+            #vali_loss.append(loss.item())
+            total += targets.size(0)
+            preds.append(
+                np.expand_dims(
+                    outputs.detach().cpu().numpy(),
+                    axis=2
+                )
+            )
+
+            trues.append(
+                np.expand_dims(
+                    targets.detach().cpu().numpy(),
+                    axis=2
+                )
+            )
+            progress_bar(batch_idx, len(vali_loader), 'MSELoss: %.3f |Total:%d'
+            % (vali_loss/(batch_idx+1), total))
+    preds = np.array(preds)
+    trues = np.array(trues)
+
+    preds = preds.reshape(
+        -1,
+        preds.shape[-2],
+        preds.shape[-1]
+    )
+
+    trues = trues.reshape(
+        -1,
+        trues.shape[-2],
+        trues.shape[-1]
+    )
+
+    mae, mse, rmse, mape, mspe = metric(preds, trues)
+    avg_loss = vali_loss / len(vali_loader)
+    #avg_loss = np.average(vali_loss)
+    net.train()
+    
+    return avg_loss, mse, mae
 
 def test(epoch, best_mse, best_mae):
     global best_acc
@@ -289,6 +358,7 @@ def test(epoch, best_mse, best_mae):
         print('mse:{}, mae:{}'.format(mse, mae))
         log_string('mse=%.4f,  mae=%.4f'% (mse, mae), False)
     # Save checkpoint.
+    """
     acc = 100.*correct/total
     if acc > best_acc:
         print('Saving..')
@@ -301,6 +371,7 @@ def test(epoch, best_mse, best_mae):
             os.mkdir('checkpoint')
         torch.save(state, os.path.join(LOG_DIR, 'ckpt.t7'))
         best_acc = acc
+    """
     return predicted,targets, best_mse, best_mae 
 
 best_mse = np.inf
@@ -310,6 +381,7 @@ for epoch in range(start_epoch, start_epoch+70):
         optimizer.param_groups[0]['lr'] = optimizer.param_groups[0]['lr']/10
         log_string('In epoch %d the LR is decay to %f' %(epoch, optimizer.param_groups[0]['lr']))
     train(epoch)
+    validate(epoch)
     predicted,targets,best_mse,best_mae = test(epoch, best_mse, best_mae)#ecg resnet品
     targets = targets.view(-1).data.cpu().numpy()
 print('best_mse:{}, best_mae:{}'.format(best_mse, best_mae))

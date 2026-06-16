@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """
 Created on Sat Mar 28 09:50:53 2020
@@ -202,7 +203,7 @@ def train(epoch):
         optimizer.zero_grad()
         outputs = net(inputs)
         lamda = 0.0001
-        
+        # orthorgonal regularization
         Ld1 = net.feature_layers[1].convdecl1.weight
         Ld2 = net.feature_layers[1].convdecl2.weight
         Hd1 = net.feature_layers[1].convdech1.weight
@@ -213,7 +214,7 @@ def train(epoch):
 #        targets = targets.squeeze()      
         #targets = targets.squeeze()
         loss = criterion(outputs, targets)
-        loss = loss+ orthogonal_regularization
+        loss = loss+ orthogonal_regularization#if orthorgonal regularization
         loss.backward()
         optimizer.step()
 
@@ -255,7 +256,7 @@ def test(epoch):
             # rint(c)
             # print(targets)
             for q in range(len(targets)):
-                for qq in range(4):
+                for qq in range(N_CLASSES):
                     if targets[q]==qq:
                         target = qq
                         class_correct[qq] += c[q].item()
@@ -269,10 +270,12 @@ def test(epoch):
         if class_total[i]==0:
             # print(classes[i],class_correct[i],class_total[i])
             continue
-        else:
-            print('Accuracy of %5s : %2d %%' % (i, 100 * class_correct[i] / class_total[i]))    
+        #else:
+            #print('Accuracy of %5s : %2d %%' % (i, 100 * class_correct[i] / class_total[i]))    
     # Save checkpoint.
-    acc = 100.*correct/total
+    
+    test_acc = 100.*correct/total
+    """
     if acc > best_acc:
         print('Saving..')
         state = {
@@ -285,8 +288,10 @@ def test(epoch):
         torch.save(state, os.path.join(LOG_DIR, 'ckpt.t7'))
         best_acc = acc
         # log_string('\ntest Epoch: %d' % epoch)
-    log_string('Best Acc:%.3f%%'%(best_acc), False)
-    print('best acc is: %f' %best_acc)        
+    """
+    log_string('Test Acc:%.3f%%'%(test_acc), False)
+    print('Test acc is: %f' %test_acc)
+            
 
 
 for epoch in range(start_epoch, start_epoch+200):# 200
@@ -294,4 +299,8 @@ for epoch in range(start_epoch, start_epoch+200):# 200
         optimizer.param_groups[0]['lr'] = optimizer.param_groups[0]['lr']/10
         log_string('In epoch %d the LR is decay to %f' %(epoch, optimizer.param_groups[0]['lr']))
     train(epoch)
-    test(epoch)
+    if (epoch + 1) % 5 == 0:
+        test(epoch)
+
+log_string('Final evaluation...')
+test(epoch)

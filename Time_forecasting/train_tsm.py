@@ -129,7 +129,7 @@ BATCH_SIZE = args.batch_size
 dataset_name = 'ECL'
 
 train_data, train_loader = get_data(args,flag = 'train')
-print("train_data[0]",train_data[0][0].shape,train_data[0][1].shape,train_data[0][2].shape,train_data[0][3].shape)
+#print("train_data[0]",train_data[0][0].shape,train_data[0][1].shape,train_data[0][2].shape,train_data[0][3].shape)
 vali_data, vali_loader = get_data(args,flag = 'val')
 test_data, test_loader = get_data(args,flag = 'test')
 #NUM_CLASS = len(set(train_dataset.labels.flatten().tolist()))
@@ -229,16 +229,87 @@ def train(epoch):
         loss.backward()
         optimizer.step()
         train_loss += loss.item()
+        
         #_, predicted = outputs.max(1)
         total += targets.size(0)
 #        correct += predicted.eq(targets).sum().item()
         predicted = outputs.view(-1).data.cpu().numpy()
         progress_bar(batch_idx, len(train_loader), 'MSELoss: %.3f |Total:%d'
             % (train_loss/(batch_idx+1), total))
+    #vali_loss = validate(epoch)
+    #loss = loss + vali_loss
     log_string('MSELoss: %.3f |Total:%d'
         % (train_loss/(batch_idx+1), total), False)
+    
+def validate(epoch):
 
-def test(epoch, best_mse, best_mae):
+    net.eval()
+
+    #vali_loss = []
+    vali_loss = 0.0
+    preds = []
+    targets_total = []
+    trues = []
+    total = 0
+    with torch.no_grad():
+
+        for batch_idx, batch in enumerate(vali_loader):
+
+            inputs, _, _, _ = batch
+            _, targets, _, _ = batch
+
+            inputs = inputs.squeeze(2)
+            targets = targets.squeeze(2)
+
+            inputs = inputs.to(device)
+            targets = targets.to(device)
+
+            targets = targets.squeeze().float()
+
+            outputs = net(inputs)
+
+            loss = criterion(outputs, targets)
+            vali_loss += loss.item()
+            #vali_loss.append(loss.item())
+            total += targets.size(0)
+            preds.append(
+                np.expand_dims(
+                    outputs.detach().cpu().numpy(),
+                    axis=2
+                )
+            )
+
+            trues.append(
+                np.expand_dims(
+                    targets.detach().cpu().numpy(),
+                    axis=2
+                )
+            )
+            progress_bar(batch_idx, len(vali_loader), 'MSELoss: %.3f |Total:%d'
+            % (vali_loss/(batch_idx+1), total))
+    preds = np.array(preds)
+    trues = np.array(trues)
+
+    preds = preds.reshape(
+        -1,
+        preds.shape[-2],
+        preds.shape[-1]
+    )
+
+    trues = trues.reshape(
+        -1,
+        trues.shape[-2],
+        trues.shape[-1]
+    )
+
+    mae, mse, rmse, mape, mspe = metric(preds, trues)
+    avg_loss = vali_loss / len(vali_loader)
+    #avg_loss = np.average(vali_loss)
+    net.train()
+    
+    return avg_loss, mse, mae
+
+def test(epoch):#, best_mse, best_mae
     global best_acc
     net.eval()
     test_loss = 0
@@ -268,17 +339,6 @@ def test(epoch, best_mse, best_mae):
             loss = criterion(outputs, targets)
             test_loss += loss.item()
             predicted = outputs.data.detach().cpu().numpy()
-            # all_out1_pres.append(all_out1_pre.detach().cpu().numpy())
-            # all_out2_pres.append(all_out2_pre.detach().cpu().numpy())
-            # all_out3_pres.append(all_out3_pre.detach().cpu().numpy())
-            # all_out1s.append(all_out1.detach().cpu().numpy())
-            # all_out2s.append(all_out2.detach().cpu().numpy())
-            # all_out3s.append(all_out3.detach().cpu().numpy())
-            # predicted = outputs.view(-1).data.detach().cpu().numpy()
-            #_, predicted = outputs.max(1)
-#            print(c)
-#            print(targets)
-            ##print("first predict targets",predicted.shape,targets.shape)
             predicted= np.expand_dims(predicted,axis=2)
             
             #targets= np.expand_dims(targets,axis=0)
@@ -296,27 +356,20 @@ def test(epoch, best_mse, best_mae):
         targets_total = targets_total.reshape(-1, targets_total.shape[-2], targets_total.shape[-1])
         print('test shape:', preds.shape, targets_total.shape)
         mae, mse, rmse, mape, mspe = metric(preds, targets_total)
+        """
         if best_mae > mae:
             best_mae = mae
-            # all_out1_pres = np.stack(all_out1_pres, axis=0)
-            # all_out2_pres = np.stack(all_out2_pres, axis=0)
-            # all_out3_pres = np.stack(all_out3_pres, axis=0)
-            # all_out1s = np.stack(all_out1s, axis=0)
-            # all_out2s = np.stack(all_out2s, axis=0)
-            # all_out3s = np.stack(all_out3s, axis=0)
             preds = np.stack(preds, axis=0)
             targets_total = np.stack(targets_total, axis=0)
-            # 保存结果到一个npz文件，按字段索引
-            # np.savez('./output/traffic_results.npz', all_out1_pres=all_out1_pres, all_out2_pres=all_out2_pres,  
-            #          all_out3_pres=all_out3_pres,all_out1s=all_out1s, all_out2s=all_out2s, all_out3s=all_out3s, preds=preds, targets=targets_total)
-            # 保存模型
             torch.save(net.state_dict(), './output/traffic_model.pth')
 
         if best_mse > mse:
             best_mse = mse
         print('mse:{}, mae:{}'.format(mse, mae))
         log_string('mse=%.4f,  mae=%.4f'% (mse, mae), False)
+        """
     # Save checkpoint.
+    """
     acc = 100.*correct/total
     if acc > best_acc:
         print('Saving..')
@@ -329,20 +382,31 @@ def test(epoch, best_mse, best_mae):
             os.mkdir('checkpoint')
         torch.save(state, os.path.join(LOG_DIR, 'ckpt.t7'))
         best_acc = acc
-    return predicted,targets, best_mse, best_mae 
+    """
+    return predicted,targets, mse, mae 
 
-best_mse = np.inf
-best_mae = np.inf
+best_val_mse = np.inf
+best_val_mae = np.inf
 for epoch in range(start_epoch, start_epoch+70):
     if epoch in [20, 70]:
         optimizer.param_groups[0]['lr'] = optimizer.param_groups[0]['lr']/10
         log_string('In epoch %d the LR is decay to %f' %(epoch, optimizer.param_groups[0]['lr']))
     train(epoch)
-    predicted,targets,best_mse,best_mae = test(epoch, best_mse, best_mae)#ecg resnet品
-    targets = targets.view(-1).data.cpu().numpy()
-print('best_mse:{}, best_mae:{}'.format(best_mse, best_mae))
-log_string('best_mse:{}, best_mae:{}'.format(best_mse, best_mae), False)
-#画图
-#plt.plot(predicted, 'r', label='prediction')
-#plt.plot(targets, 'b', label='real')
-#plt.legend(loc='best')
+    avg_loss, mse, mae=validate(epoch)
+    if best_val_mae > mae:
+        best_val_mae = mae
+        #preds = np.stack(preds, axis=0)
+        #targets_total = np.stack(targets_total, axis=0)#这行里外复杂分析
+        torch.save(net.state_dict(), './output/traffic_model.pth')
+    if best_val_mse > mse:
+        best_val_mse = mse
+
+net.load_state_dict(
+    torch.load(
+        './output/traffic_model.pth'
+    )
+)
+predicted,targets,test_mse,test_mae = test(epoch)#, best_mse, best_mae
+targets = targets.view(-1).data.cpu().numpy()
+print('test_mse:{}, test_mae:{}'.format(test_mse, test_mae))
+log_string('test_mse:{}, test_mae:{}'.format(test_mse, test_mae), False)
