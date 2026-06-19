@@ -259,7 +259,7 @@ class Dataset_ETT_minute(Dataset):
         border2s = [12*30*24*4, 12*30*24*4+4*30*24*4, 12*30*24*4+8*30*24*4]
         border1 = border1s[self.set_type]
         border2 = border2s[self.set_type]
-        
+        #print("datanum:",border2 - border1)
         if self.features=='M' or self.features=='MS':
             cols_data = df_raw.columns[1:]
             df_data = df_raw[cols_data]
@@ -309,6 +309,18 @@ class Dataset_ETT_minute(Dataset):
 
 
 def get_data(args,flag = 'train'):
+    data_dict = {
+            'ETTh1':Dataset_ETT_hour,
+            'ETTh2':Dataset_ETT_hour,
+            'ETTm1':Dataset_ETT_minute,
+            'ETTm2':Dataset_ETT_minute,
+            'electricity':Dataset_Custom,
+            'weather':Dataset_Custom,
+            'Solar':Dataset_Custom,
+            'traffic':Dataset_Custom,
+            'custom':Dataset_Custom,
+        }
+    Data = data_dict[args.dataset]
     timeenc = 0 if args.embed!='timeF' else 1
     if flag == 'test':
         shuffle_flag = False; drop_last = True; batch_size = args.batch_size; freq=args.freq
@@ -317,7 +329,7 @@ def get_data(args,flag = 'train'):
         #Data = Dataset_Pred
     else:
         shuffle_flag = True; drop_last = True; batch_size = args.batch_size; freq=args.freq
-    data_set = Dataset_Custom(#哪里的品
+    data_set = Data(
         root_path=args.root_path,
         data_path=args.data_path,
         flag=flag,
