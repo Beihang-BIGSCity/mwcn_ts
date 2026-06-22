@@ -5,7 +5,7 @@ lr:learning rate,default:0.001<br>
 log_dir: the folder save the results<br>
 dataset:dataset #ECL ETT weather...<br>
 root_path: save all the datasets<br>
-data_path:数据集文件名,default='ECL.csv'.<br>
+data_path:dataset name,default='ECL.csv'.<br>
 (root_path+data_path is the total data path)<br>
 seq_len: input length, default:96<br>
 label_len: length of label, default:0<br>
