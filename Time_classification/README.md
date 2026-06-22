@@ -1,5 +1,5 @@
 #README in Time_classification<br>
-run bash run_layers.sh<br>
+run the following command: bash run_layers.sh<br>
 main parameters:<br>
 lr:learning rate<br>
 log_dir: folder to save results<br>
