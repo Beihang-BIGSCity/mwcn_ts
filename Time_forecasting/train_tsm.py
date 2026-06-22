@@ -41,15 +41,15 @@ parser = argparse.ArgumentParser(description='PyTorch Time prediction Training')
 parser.add_argument('--lr', default=0.001, type=float, help='learning rate')
 parser.add_argument('--resume', '-r',action='store_true', help='resume from checkpoint')
 parser.add_argument('--gpu', default='0', help='GPU to use [default: GPU 0]')
-parser.add_argument('--log_dir', default='ECLnew', help='Log dir [default: log]')#ECL96 ETT ETT96 weather96
-parser.add_argument('--dataset', default='ECL', help='dataset [default: data]')#ECL ETT weather
+parser.add_argument('--log_dir', default='ECLnew', help='Log dir [default: log]')
+parser.add_argument('--dataset', default='ECL', help='dataset [default: data]')
 parser.add_argument('--batch_size', type=int, default=16, help='Batch Size during training [default: 32]')
 parser.add_argument('--optimizer', default='momentum', help='adam or momentum [default: adam]')
-parser.add_argument('--root_path',default='./Datasets/',help='root path')#./Datasets_informer/ETT/
-parser.add_argument('--data_path',default='ECL.csv',help='data path')#ETTm2.csv WTH.csv
-parser.add_argument('--seq_len',type=int,default=96,help='input length')#36
+parser.add_argument('--root_path',default='./Datasets/',help='root path')
+parser.add_argument('--data_path',default='ECL.csv',help='data path')
+parser.add_argument('--seq_len',type=int,default=96,help='input length')
 parser.add_argument('--label_len',type=int,default=0,help='length of label')
-parser.add_argument('--pred_len',type=int,default=96,help='predict length')#24
+parser.add_argument('--pred_len',type=int,default=96,help='predict length')
 parser.add_argument('--output_size',type=int,default=96,help='output length')
 parser.add_argument('--features', type=str, default='S', help='forecasting task, options:[M, S, MS]; M:multivariate predict multivariate, S:univariate predict univariate, MS:multivariate predict univariate')
 parser.add_argument('--target', type=str, default='MT_320', help='target feature in S or MS task')#'OT'
